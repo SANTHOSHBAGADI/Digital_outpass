@@ -1,0 +1,498 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Global styles */
+body {
+    /* Background image with gradient overlay */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95); /* Slightly transparent white background for readability */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Headings */
+h1, h2  {
+    color: #222;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #444;
+}
+h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+
+
+/* Buttons */
+button, .btn {
+    padding: 12px 25px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+button:hover, .btn:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+button:active, .btn:active {
+    transform: scale(0.95);
+}
+
+button[name="cancel_request"], button[name="action"][value="reject"] {
+    background: #ff4444;
+}
+
+button[name="cancel_request"]:hover, button[name="action"][value="reject"]:hover {
+    background: #cc0000;
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+input, select, textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Login Options */
+.login-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: none;
+    animation: slideIn 0.5s ease-in-out;
+}
+
+/* Requests */
+.request {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.request:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.request p {
+    margin: 5px 0;
+    color: #444;
+}
+
+/* Messages */
+.error {
+    color: #ff4444;
+    background: rgba(255, 230, 230, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 15px;
+    animation: shake 0.5s;
+}
+
+.success {
+    color: #4CAF50;
+    background: rgba(230, 244, 230, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 15px;
+    animation: bounceIn 0.5s;
+}
+
+/* Links */
+a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #45a049;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+@keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+    h3{
+        font-size:1.0rem;
+    }
+
+    form {
+        max-width: 100%;
+    }
+
+    .login-options {
+        flex-direction: column;
+    }
+
+    .request {
+        padding: 15px;
+    }
+}
+/* Search Form */
+.search-form {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.search-container {
+    display: flex;
+    gap: 10px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-container input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+.search-container button {
+    padding: 10px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-container button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.search-container button:active {
+    transform: scale(0.95);
+}
+
+/* Responsive Design for Search Form */
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-container input {
+        width: 100%;
+    }
+
+    .search-container button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+/* Search Form */
+.search-form {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.search-container {
+    display: flex;
+    gap: 10px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-container input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+.search-container button {
+    padding: 10px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-container button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.search-container button:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-container input {
+        width: 100%;
+    }
+
+    .search-container button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+
+
+/* Check In/Check Out Buttons */
+.request form button[name="check_in"],
+.request form button[name="check_out"] {
+    padding: 8px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.request form button[name="check_in"] {
+    background: #2196F3; /* Blue for Check In */
+    color: white;
+}
+
+.request form button[name="check_out"] {
+    background: #FF9800; /* Orange for Check Out */
+    color: white;
+}
+
+.request form button[name="check_in"]:hover {
+    background: #1e88e5;
+    transform: scale(1.05);
+}
+
+.request form button[name="check_out"]:hover {
+    background: #fb8c00;
+    transform: scale(1.05);
+}
+
+.request form button[name="check_in"]:active,
+.request form button[name="check_out"]:active {
+    transform: scale(0.95);
+}
+
+
+.log-book-entries {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.log-book-entries h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.log-entry {
+    padding: 8px;
+}
+
+.log-entry p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+/* Success and Error Messages */
+.success {
+    color: #4CAF50;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.error {
+    color: #f44336;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+
+
+/* Button Group (New) */
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Log Book Button (New) */
+.btn.log-book-btn {
+    background: #9c27b0; /* Purple for Log Book */
+    color: white;
+}
+
+.btn.log-book-btn:hover {
+    background: #8e24aa;
+    transform: scale(1.05);
+}
+
+/* Log Book Table (New) */
+.log-book-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.log-book-table th,
+.log-book-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.log-book-table th {
+    background: #4CAF50;
+    color: white;
+    font-weight: 600;
+}
+
+.log-book-table tr:hover {
+    background: #f9f9f9;
+}
+
+.log-book-table td {
+    font-size: 0.9rem;
+}
+
