@@ -34,7 +34,7 @@ Admin: Maintains the digital log book, adds and removes entries every three mont
 
 ---
 
-### Technologies Used
+# Technologies Used
 
 1. **Frontend**:
    - **HTML5**: Structures the web pages and forms for user interaction.
@@ -60,30 +60,30 @@ Admin: Maintains the digital log book, adds and removes entries every three mont
    - **Email Integration**: Utilizes PHP’s mail functionality (via `send_email.php`) to notify students of outpass statuses.
    - **Security Practices**: Implements prepared statements to prevent SQL injection and password hashing for user security.
 # SCREENSHOTS:
-1. # HOME PAGE:
+1. ## HOME PAGE:
 ![image alt](https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/landing.png)
 
-2. # STUDENT REGISTER FOR OUTPASS PORTAL:
+2. ## STUDENT REGISTER FOR OUTPASS PORTAL:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/stu%20register.png)
 
-3. # ROLE BASED LOGIN:
+3. ## ROLE BASED LOGIN:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/role%20base%20login.png)
 
-4. # STUDENT DASHBOARD:
+4. ## STUDENT DASHBOARD:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20230142.png)
 
-5. # FACULTY/HOD DASHBOARD:
+5. ## FACULTY/HOD DASHBOARD:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20230240.png)
 
-6. # SECURITY DASHBOARD:
+6. ## SECURITY DASHBOARD:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231942.png)
 
-7. # DIGITAL LOG BOOK:
+7. ## DIGITAL LOG BOOK:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231957.png)
 
-8. # ADMIN ADD(FACULTY/SECURITY ACCOUNTS):
+8. ## ADMIN ADD(FACULTY/SECURITY ACCOUNTS):
 ![image alt](https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231834.png)
 
-9. # ADMIN CAN MANAGE THE ACCOUNTS
+9. ## ADMIN CAN MANAGE THE ACCOUNTS
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231834.png)
 
