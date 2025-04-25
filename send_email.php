@@ -8,7 +8,7 @@ require 'PHPMailer/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-function sendEmail($to, $subject, $body, $fromEmail = 'srisivanicollege25@gmail.com', $fromName = 'Outpass System') {
+function sendEmail($to, $subject, $body, $fromEmail = 'youremail@gmail.com', $fromName = 'Outpass System') {
     $mail = new PHPMailer(true);
 
     try {
@@ -16,8 +16,8 @@ function sendEmail($to, $subject, $body, $fromEmail = 'srisivanicollege25@gmail.
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com'; // Gmail SMTP server
         $mail->SMTPAuth = true;
-        $mail->Username = 'srisivanicollege25@gmail.com'; // Your Gmail address
-        $mail->Password = 'kjlj mcsi ulcn fmen'; // Your Gmail App Password
+        $mail->Username = 'youremail@gmail.com'; // Your Gmail address
+        $mail->Password = 'yourpasskey'; // Your Gmail App Password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
