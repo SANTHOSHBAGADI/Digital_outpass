@@ -7,7 +7,7 @@ Security: Verifies authorized outpasses, records student check-in and check-out,
 Admin: Maintains the digital log book, adds and removes entries every three months, and manages the HOD and Security accounts.
 
 
-### Benefits of the Outpass Management System
+# Benefits of the Outpass Management System
 
 1. **Efficiency**:
    - Automates the outpass approval process, reducing manual effort and paperwork.
@@ -59,24 +59,31 @@ Admin: Maintains the digital log book, adds and removes entries every three mont
 6. **Additional Features**:
    - **Email Integration**: Utilizes PHP’s mail functionality (via `send_email.php`) to notify students of outpass statuses.
    - **Security Practices**: Implements prepared statements to prevent SQL injection and password hashing for user security.
-
-This combination of technologies creates a robust, secure, and user-friendly system tailored for educational institutions, with room for future enhancements like mobile apps or advanced analytics.
+# SCREENSHOTS:
+1. # HOME PAGE:
 ![image alt](https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/landing.png)
-HOME PAGE.
+
+2. # STUDENT REGISTER FOR OUTPASS PORTAL:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/stu%20register.png)
-STUDENT REGISTER FOR OUTPASS PORTAL.
+
+3. # ROLE BASED LOGIN:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/role%20base%20login.png)
-ROLE BASED LOGIN.
+
+4. # STUDENT DASHBOARD:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20230142.png)
-STUDENT DASHBOARD.
+
+5. # FACULTY/HOD DASHBOARD:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20230240.png)
-FACULTY/HOD DASHBOARD
+
+6. # SECURITY DASHBOARD:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231942.png)
-SECURITY DASHBOARD.
+
+7. # DIGITAL LOG BOOK:
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231957.png)
-DIGITAL LOG BOOK.
+
+8. # ADMIN ADD(FACULTY/SECURITY ACCOUNTS):
 ![image alt](https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231834.png)
-ADMIN ADD(FACULTY/SECURITY ACCOUNTS).
+
+9. # ADMIN CAN MANAGE THE ACCOUNTS
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231834.png)
-ADMIN CAN MANAGE THE ACCOUNTS.
 
