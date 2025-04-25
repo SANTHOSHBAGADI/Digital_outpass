@@ -15,8 +15,6 @@ ROLE BASED LOGIN.
 STUDENT DASHBOARD.
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20230240.png)
 FACULTY/HOD DASHBOARD
-![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20230257.png)
-REVIEW STUDENT REGISTERATION.
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231942.png)
 SECURITY DASHBOARD.
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231957.png)
@@ -25,6 +23,4 @@ DIGITAL LOG BOOK.
 ADMIN ADD(FACULTY/SECURITY ACCOUNTS).
 ![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20231834.png)
 ADMIN CAN MANAGE THE ACCOUNTS.
-![image alt]( https://github.com/SANTHOSHBAGADI/Digital_outpass/blob/main/project%20shots/Screenshot%202025-04-25%20230031.png
-)
-FORGOT PASSWORD PAGE.
+
