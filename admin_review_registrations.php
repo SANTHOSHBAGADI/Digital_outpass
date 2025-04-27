@@ -85,9 +85,12 @@ $result = mysqli_stmt_get_result($stmt);
         }
         table {
             width: 100%;
+            max-width: 100%;
             border-collapse: collapse;
             font-size: 14px;
             text-align: left;
+            overflow-x: auto;
+            display: block;
         }
         th, td {
             padding: 12px 15px;
