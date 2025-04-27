@@ -12,6 +12,19 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+// Verify the log_book table structure
+$check_columns = ['check_out_time', 'verify_time'];
+foreach ($check_columns as $column) {
+    $check_table_query = "SHOW COLUMNS FROM log_book LIKE '$column'";
+    $check_table_result = mysqli_query($conn, $check_table_query);
+    if (mysqli_num_rows($check_table_result) == 0) {
+        $alter_table_query = "ALTER TABLE log_book ADD COLUMN $column DATETIME NULL";
+        if (!mysqli_query($conn, $alter_table_query)) {
+            die("Failed to add $column column: " . mysqli_error($conn));
+        }
+    }
+}
+
 // Fetch the security personnel's details (name, email, phone, profile picture, created_at, status)
 $query = "SELECT name, email, phone, profile_picture, created_at, status 
           FROM security 
