@@ -12,6 +12,39 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+// Check if the log_book table exists, and create it if it doesn't
+$check_table_exists = "SHOW TABLES LIKE 'log_book'";
+$check_table_result = mysqli_query($conn, $check_table_exists);
+if (mysqli_num_rows($check_table_result) == 0) {
+    $create_table_query = "
+        CREATE TABLE log_book (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            request_id INT NOT NULL,
+            student_id VARCHAR(50) NOT NULL,
+            verify_time DATETIME NULL,
+            check_out_time DATETIME NULL,
+            check_in_time DATETIME NULL,
+            FOREIGN KEY (request_id) REFERENCES outpass_requests(id),
+            FOREIGN KEY (student_id) REFERENCES students(student_id)
+        )";
+    if (!mysqli_query($conn, $create_table_query)) {
+        die("Failed to create log_book table: " . mysqli_error($conn));
+    }
+}
+
+// Verify the log_book table structure for required columns
+$required_columns = ['check_out_time', 'verify_time', 'check_in_time'];
+foreach ($required_columns as $column) {
+    $check_column_query = "SHOW COLUMNS FROM log_book LIKE '$column'";
+    $check_column_result = mysqli_query($conn, $check_column_query);
+    if (mysqli_num_rows($check_column_result) == 0) {
+        $alter_table_query = "ALTER TABLE log_book ADD COLUMN $column DATETIME NULL";
+        if (!mysqli_query($conn, $alter_table_query)) {
+            die("Failed to add $column column to log_book table: " . mysqli_error($conn));
+        }
+    }
+}
+
 // Fetch the security personnel's details (name, email, phone, profile picture, created_at, status)
 $query = "SELECT name, email, phone, profile_picture, created_at, status 
           FROM security 
@@ -36,69 +69,37 @@ $security_profile_picture = $security['profile_picture'] ?? 'https://via.placeho
 $security_created_at = $security['created_at'];
 $security_status = $security['status'];
 
-// Handle profile update
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
-    $new_name = trim($_POST['name']);
-    $new_email = trim($_POST['email']);
-    $new_phone = trim($_POST['phone']);
-    $profile_picture = $security_profile_picture;
-
-    // Handle profile picture upload
-    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
-        $upload_dir = 'uploads/';
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
-        }
-        $file_name = time() . '_' . basename($_FILES['profile_picture']['name']);
-        $target_file = $upload_dir . $file_name;
-        $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-
-        if (in_array($file_type, $allowed_types) && $_FILES['profile_picture']['size'] <= 5000000) { // 5MB limit
-            if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target_file)) {
-                $profile_picture = $target_file;
-                // Delete old profile picture if it exists and is not the default
-                if ($security_profile_picture && $security_profile_picture != 'https://via.placeholder.com/80' && file_exists($security_profile_picture)) {
-                    unlink($security_profile_picture);
-                }
-            } else {
-                $error = "Failed to upload profile picture.";
-            }
-        } else {
-            $error = "Invalid file type or size. Only JPG, PNG, GIF files under 5MB are allowed.";
-        }
-    }
-
-    // Update the security personnel's details in the database
-    $query = "UPDATE security SET name = ?, email = ?, phone = ?, profile_picture = ? WHERE security_id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "sssss", $new_name, $new_email, $new_phone, $profile_picture, $_SESSION['user_id']);
-    if (mysqli_stmt_execute($stmt)) {
-        $success = "Profile updated successfully.";
-        $security_name = $new_name;
-        $security_email = $new_email;
-        $security_phone = $new_phone;
-        $security_profile_picture = $profile_picture;
-    } else {
-        $error = "Failed to update profile.";
-    }
-}
-
 // Handle check-in actions
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['check_in'])) {
     $request_id = $_POST['request_id'];
     $student_id = $_POST['student_id'];
     $timestamp = date('Y-m-d H:i:s');
 
-    // Update the existing log entry with check-in time
-    $log_query = "UPDATE log_book SET check_in_time = ? WHERE request_id = ?";
-    $log_stmt = mysqli_prepare($conn, $log_query);
-    mysqli_stmt_bind_param($log_stmt, "si", $timestamp, $request_id);
+    // Check if a log entry exists for this request
+    $query = "SELECT COUNT(*) FROM log_book WHERE request_id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "i", $request_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $count);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+
+    if ($count > 0) {
+        // Update the existing log entry
+        $log_query = "UPDATE log_book SET check_in_time = ? WHERE request_id = ?";
+        $log_stmt = mysqli_prepare($conn, $log_query);
+        mysqli_stmt_bind_param($log_stmt, "si", $timestamp, $request_id);
+    } else {
+        // Insert a new log entry
+        $log_query = "INSERT INTO log_book (request_id, student_id, check_in_time) VALUES (?, ?, ?)";
+        $log_stmt = mysqli_prepare($conn, $log_query);
+        mysqli_stmt_bind_param($log_stmt, "iss", $request_id, $student_id, $timestamp);
+    }
 
     if (mysqli_stmt_execute($log_stmt)) {
         $success = "Check In recorded successfully.";
     } else {
-        $error = "Failed to record Check In.";
+        $error = "Failed to record Check In: " . mysqli_error($conn);
     }
 }
 
@@ -107,16 +108,17 @@ $records_per_page = 10;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $records_per_page;
 
-// Handle search for log book entries
+// Handle search for log entries
 $log_search = '';
 if (isset($_POST['log_search'])) {
     $log_search = trim($_POST['log_search']);
 }
 
-// Count total log book entries for pagination
+// Count total log entries for pagination
 $count_query = "SELECT COUNT(*) 
                 FROM log_book l 
-                JOIN students s ON l.student_id = s.student_id";
+                JOIN students s ON l.student_id = s.student_id 
+                JOIN outpass_requests r ON l.request_id = r.id";
 if (!empty($log_search)) {
     $count_query .= " WHERE l.student_id LIKE ?";
 }
@@ -132,10 +134,11 @@ mysqli_stmt_close($count_stmt);
 
 $total_pages = ceil($total_records / $records_per_page);
 
-// Fetch log book entries with pagination
-$query = "SELECT l.*, s.name 
+// Fetch log entries with pagination
+$query = "SELECT l.*, s.name, r.purpose, r.out_date, r.in_date 
           FROM log_book l 
-          JOIN students s ON l.student_id = s.student_id";
+          JOIN students s ON l.student_id = s.student_id 
+          JOIN outpass_requests r ON l.request_id = r.id";
 if (!empty($log_search)) {
     $query .= " WHERE l.student_id LIKE ?";
 }
@@ -281,7 +284,7 @@ $result = mysqli_stmt_get_result($stmt);
             margin-bottom: 20px;
             font-size: 22px;
         }
-        .request {
+        .log-entry {
             background: #f9f9f9;
             padding: 15px;
             margin-bottom: 15px;
@@ -289,22 +292,22 @@ $result = mysqli_stmt_get_result($stmt);
             border: 1px solid #ddd;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .request:hover {
+        .log-entry:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
-        .request p {
+        .log-entry p {
             margin: 5px 0;
             color: #555;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .request form {
+        .log-entry form {
             display: inline-block;
             margin-right: 10px;
         }
-        .request button {
+        .log-entry button {
             padding: 8px 15px;
             border: none;
             border-radius: 5px;
@@ -312,11 +315,11 @@ $result = mysqli_stmt_get_result($stmt);
             font-size: 14px;
             transition: all 0.3s ease;
         }
-        .request button[name="check_in"] {
+        .log-entry button[name="check_in"] {
             background-color: #28a745;
             color: #fff;
         }
-        .request button[name="check_in"]:hover {
+        .log-entry button[name="check_in"]:hover {
             background-color: #218838;
             transform: scale(1.05);
         }
@@ -591,7 +594,7 @@ $result = mysqli_stmt_get_result($stmt);
             if (isset($success)) echo "<p class='success'><i class='fas fa-check-circle'></i> " . htmlspecialchars($success) . "</p>";
             ?>
 
-            <h2>Log Book Entries</h2>
+            <h2>Log Entries</h2>
             <form method="POST" class="search-form">
                 <div class="search-container">
                     <input type="text" name="log_search" placeholder="Search by Student ID" value="<?php echo htmlspecialchars($log_search); ?>">
@@ -600,18 +603,20 @@ $result = mysqli_stmt_get_result($stmt);
             </form>
             <?php
             if (!$result) {
-                echo "<p class='error'><i class='fas fa-exclamation-circle'></i> Error fetching log book entries: " . mysqli_error($conn) . "</p>";
+                echo "<p class='error'><i class='fas fa-exclamation-circle'></i> Error fetching log entries: " . mysqli_error($conn) . "</p>";
             } else {
                 if (mysqli_num_rows($result) == 0) {
-                    echo "<p>No log book entries found.</p>";
+                    echo "<p>No log entries found.</p>";
                 } else {
                     while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<div class='request'>";
+                        echo "<div class='log-entry'>";
                         echo "<p><i class='fas fa-user'></i> Student: " . htmlspecialchars($row['name']) . " (" . htmlspecialchars($row['student_id']) . ")</p>";
-                        echo "<p><i class='fas fa-sign-out-alt'></i> Check Out: " . htmlspecialchars($row['check_out_time'] ?? 'Not checked out') . "</p>";
-                        echo "<p><i class='fas fa-sign-in-alt'></i> Check In: " . htmlspecialchars($row['check_in_time'] ?? 'Not checked in') . "</p>";
-                        echo "<p><i class='fas fa-check-circle'></i> Verify Time: " . htmlspecialchars($row['verify_time'] ?? 'Not verified') . "</p>";
-                        if (empty($row['check_in_time'])) {
+                        echo "<p><i class='fas fa-comment'></i> Purpose: " . htmlspecialchars($row['purpose']) . "</p>";
+                        echo "<p><i class='fas fa-calendar-alt'></i> Out: " . htmlspecialchars($row['out_date']) . " | In: " . htmlspecialchars($row['in_date']) . "</p>";
+                        echo "<p><i class='fas fa-clock'></i> Verify Time: " . ($row['verify_time'] ? htmlspecialchars($row['verify_time']) : 'N/A') . "</p>";
+                        echo "<p><i class='fas fa-sign-out-alt'></i> Check Out: " . ($row['check_out_time'] ? htmlspecialchars($row['check_out_time']) : 'N/A') . "</p>";
+                        echo "<p><i class='fas fa-sign-in-alt'></i> Check In: " . ($row['check_in_time'] ? htmlspecialchars($row['check_in_time']) : 'N/A') . "</p>";
+                        if (!$row['check_in_time']) {
                             ?>
                             <form method="POST" style="display: inline-block;">
                                 <input type="hidden" name="request_id" value="<?php echo $row['request_id']; ?>">
