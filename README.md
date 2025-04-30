@@ -6,6 +6,8 @@ HOD (Head of Department): Manages student accounts (e.g., deletion), and approve
 Security: Verifies authorized outpasses, records student check-in and check-out, and records these activities in an electronic log book.  
 Admin: Maintains the digital log book, adds and removes entries every three months, and manages the HOD and Security accounts.
 
+# Demo
+http://outpass.infinityfreeapp.com/home.php
 
 # Benefits of the Outpass Management System
 
